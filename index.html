@@ -13,7 +13,34 @@
             margin: 0 auto;
             position: relative;
         }
-
+/* 藏式烟花CSS（粘贴到<style>） */
+.firework {
+  position: absolute;
+  pointer-events: none;
+  z-index: 999;
+  transform: translate(-50%, -50%);
+  width: 0;
+  height: 0;
+}
+.firework-part {
+  position: absolute;
+  width: 4px;
+  height: 15px;
+  background: linear-gradient(to top, #ff3333, #ff9933); /* 藏红+藏金 */
+  border-radius: 50%;
+  opacity: 0.9;
+  animation: firework-burst 1.5s ease-out forwards;
+}
+@keyframes firework-burst {
+  0% {
+    transform: translateY(0) rotate(0deg);
+    opacity: 0.9;
+  }
+  100% {
+    transform: translateY(-100px) rotate(720deg);
+    opacity: 0;
+  }
+}
         /* 播放按钮样式 */
         .play-btn {
             position: absolute;
@@ -140,9 +167,32 @@
             document.querySelector('video').load();
             // 隐藏视频，让用户重新点击播放
             hideVideo();
-        }
+        }// 藏式烟花JS（粘贴到<script>最后）
+document.getElementById('panorama').addEventListener('click', function(e) {
+  // 先清空旧烟花
+  document.querySelectorAll('.firework').forEach(fw => fw.remove());
+  
+  // 创建烟花容器
+  const firework = document.createElement('div');
+  firework.className = 'firework';
+  firework.style.left = `${e.clientX}px`;
+  firework.style.top = `${e.clientY}px`;
+  document.body.appendChild(firework);
+
+  // 生成12个烟花粒子（圆形绽放）
+  for (let i = 0; i < 12; i++) {
+    const part = document.createElement('div');
+    part.className = 'firework-part';
+    part.style.transform = `rotate(${i * 30}deg) translateY(0)`;
+    firework.appendChild(part);
+  }
+
+  // 2秒后删除烟花
+  setTimeout(() => firework.remove(), 1500);
+});
     </script>
 </body>
 </html>
+
 
 
