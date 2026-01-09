@@ -24,12 +24,12 @@
 }
 .firework-part {
   position: absolute;
-  width: 4px;
-  height: 15px;
-  background: linear-gradient(to top, #ff3333, #ff9933); /* 藏红+藏金 */
+  width: 6px; /* 从4px改成6px，更粗 */
+  height: 25px; /* 从15px改成25px，更长 */
+  background: linear-gradient(to top, #ff3333, #ff9933);
   border-radius: 50%;
-  opacity: 0.9;
-  animation: firework-burst 1.5s ease-out forwards;
+  opacity: 1; /* 从0.9改成1，更亮 */
+  animation: firework-burst 2s ease-out forwards; /* 从1.5s改成2s，绽放更久 */
 }
 @keyframes firework-burst {
   0% {
@@ -61,11 +61,16 @@
 .particle {
   position: absolute;
   pointer-events: none;
-  z-index: 999;
+  z-index: 999; /* 保持不变 */
   background-size: contain;
   background-repeat: no-repeat;
-  opacity: 0.8;
-  animation: particle-fall 2s ease-out forwards;
+  opacity: 1; /* 从0.8改成1，更亮 */
+  animation: particle-fall 3s ease-out forwards; /* 从2s改成3s，飘得更久 */
+}
+/* 下面新增：放大粒子尺寸 */
+.particle {
+  width: 50px !important; /* 强制放大到50px */
+  height: 50px !important;
 }
 @keyframes particle-fall {
   0% {
@@ -244,6 +249,7 @@ document.getElementById('panorama').addEventListener('click', function(e) {
     </script>
 </body>
 </html>
+
 
 
 
