@@ -57,6 +57,11 @@
 
     <!-- 播放按钮 -->
     <button class="play-btn" onclick="showVideo()">点击播放卓玛讲解视频</button>
+    <!-- 转山场景切换按钮 -->
+<div style="position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px;">
+  <button onclick="changeScene('test.jpg', 'https://kailashtrek.online/wp-content/uploads/2026/01/KAILASH.mp4')" style="padding: 8px 16px; background: #ff3333; color: white; border: none; border-radius: 4px; cursor: pointer;">转山起点</button>
+  <button onclick="changeScene('pass.jpg', '这里换垭口的讲解视频链接')" style="padding: 8px 16px; background: #2299ff; color: white; border: none; border-radius: 4px; cursor: pointer;">第一垭口</button>
+</div>
 
     <!-- 视频弹窗 -->
     <div id="videoModal">
@@ -81,7 +86,20 @@
             document.getElementById('videoModal').style.display = 'block';
             document.querySelector('.play-btn').style.display = 'none'; // 隐藏播放按钮
         }
-
+// 切换转山场景（全景图+讲解视频）
+function changeScene(picUrl, videoUrl) {
+  // 切换全景图
+  pannellum.viewer('panorama', {
+    "panorama": picUrl,
+    "autoLoad": true,
+    "title": picUrl === 'test.jpg' ? '冈仁波齐转山起点' : '转山第一垭口'
+  });
+  // 切换视频
+  document.querySelector('video source').src = videoUrl;
+  document.querySelector('video').load();
+  // 隐藏视频，让用户重新点击播放
+  hideVideo();
+}
         // 隐藏视频
         function hideVideo() {
             document.getElementById('videoModal').style.display = 'none';
@@ -89,4 +107,5 @@
         }
     </script>
 </body>
+
 </html>
