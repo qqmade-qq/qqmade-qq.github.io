@@ -2,26 +2,16 @@
 <html>
 <head>
     <meta charset="UTF-8">
-    <!-- 引入Pannellum只是为了图片的拖动效果 -->
+    <!-- 引入Pannellum全景图依赖 -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
     <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
     <style>
-        /* 全景容器 */
+        /* 全景图容器样式 */
         #panorama {
             width: 100%;
             height: 600px;
             margin: 0 auto;
-            position: relative; /* 关键：让视频能叠加在上面 */
-        }
-
-        /* 视频弹窗样式 */
-        #videoModal {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            display: none; /* 默认隐藏 */
-            z-index: 999; /* 确保在图片上面 */
+            position: relative;
         }
 
         /* 播放按钮样式 */
@@ -41,7 +31,38 @@
             z-index: 998;
         }
 
-        /* 视频控制条强制显示 */
+        /* 场景切换按钮容器 */
+        .scene-btn-box {
+            position: absolute;
+            bottom: 60px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 10px;
+            z-index: 998;
+        }
+
+        /* 场景切换按钮样式 */
+        .scene-btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            color: white;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        /* 视频弹窗样式 */
+        #videoModal {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            z-index: 999;
+        }
+
+        /* 视频样式 */
         #videoModal video {
             width: 500px;
             height: 300px;
@@ -49,33 +70,43 @@
             border: 3px solid #fff;
             border-radius: 8px;
         }
+
+        /* 关闭视频按钮 */
+        .close-video-btn {
+            margin-top: 10px;
+            padding: 8px 16px;
+            cursor: pointer;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 4px;
+        }
     </style>
 </head>
 <body>
-    <!-- 全景图片容器 -->
+    <!-- 全景图容器 -->
     <div id="panorama"></div>
 
-    <!-- 播放按钮 -->
+    <!-- 播放视频按钮 -->
     <button class="play-btn" onclick="showVideo()">点击播放卓玛讲解视频</button>
-    <!-- 转山场景切换按钮 -->
-<!-- 修正后的场景切换按钮 -->
-<div style="position: absolute; bottom: 60px; left: 50%; transform: translateX(-50%); display: flex; gap: 10px;">
-  <!-- 外面用单引号，里面参数用双引号 -->
-  <button onclick='changeScene("test.jpg", "https://kailashtrek.online/wp-content/uploads/2026/01/KAILASH.mp4")' style="padding: 8px 16px; background: #ff3333; color: white; border: none; border-radius: 4px; cursor: pointer;">转山起点</button>
-  <button onclick='changeScene("pass.jpg", "这里换垭口的讲解视频链接")' style="padding: 8px 16px; background: #2299ff; color: white; border: none; border-radius: 4px; cursor: pointer;">第一垭口</button>
-</div>
+
+    <!-- 场景切换按钮 -->
+    <div class="scene-btn-box">
+        <button class="scene-btn" style="background: #ff3333;" onclick='changeScene("test.jpg", "https://kailashtrek.online/wp-content/uploads/2026/01/KAILASH.mp4")'>转山起点</button>
+        <button class="scene-btn" style="background: #2299ff;" onclick='changeScene("pass.jpg", "https://kailashtrek.online/wp-content/uploads/2026/01/KAILASH.mp4")'>第一垭口</button>
+    </div>
 
     <!-- 视频弹窗 -->
     <div id="videoModal">
-        <video controls="controls" autoplay="autoplay">
+        <video controls autoplay>
             <source src="https://kailashtrek.online/wp-content/uploads/2026/01/KAILASH.mp4" type="video/mp4">
             你的浏览器不支持视频播放
         </video>
-        <button style="margin-top: 10px; padding: 8px 16px; cursor: pointer;" onclick="hideVideo()">关闭视频</button>
+        <button class="close-video-btn" onclick="hideVideo()">关闭视频</button>
     </div>
 
     <script>
-        // 初始化全景图片（保留拖动效果）
+        // 初始化全景图（默认显示转山起点）
         pannellum.viewer('panorama', {
             "panorama": "test.jpg",
             "autoLoad": true,
@@ -86,47 +117,30 @@
         // 显示视频
         function showVideo() {
             document.getElementById('videoModal').style.display = 'block';
-            document.querySelector('.play-btn').style.display = 'none'; // 隐藏播放按钮
+            document.querySelector('.play-btn').style.display = 'none';
         }
-        // 补全切换场景的函数
-function changeScene(picUrl, videoUrl) {
-  // 1. 切换全景图
-  pannellum.viewer('panorama', {
-    "panorama": picUrl,
-    "autoLoad": true,
-    "title": picUrl === "test.jpg" ? "冈仁波齐转山起点" : "转山第一垭口"
-  });
-  // 2. 切换视频
-  const videoSource = document.querySelector('video source');
-  videoSource.src = videoUrl;
-  document.querySelector('video').load();
-  // 3. 隐藏视频，让用户重新点击播放
-  hideVideo();
-}
-        
- 切换转山场景（全景图+讲解视频）
-function changeScene(picUrl, videoUrl) {
-  切换全景图
-  pannellum.viewer('panorama', {
-    "panorama": picUrl,
-    "autoLoad": true,
-    "title": picUrl === 'test.jpg' ? '冈仁波齐转山起点' : '转山第一垭口'
-  });
-  // 切换视频
-  document.querySelector('video source').src = videoUrl;
-  document.querySelector('video').load();
-  // 隐藏视频，让用户重新点击播放
-  hideVideo();
-}
+
         // 隐藏视频
         function hideVideo() {
             document.getElementById('videoModal').style.display = 'none';
-            document.querySelector('.play-btn').style.display = 'block'; // 显示播放按钮
+            document.querySelector('.play-btn').style.display = 'block';
+        }
+
+        // 切换转山场景（全景图+视频）
+        function changeScene(picUrl, videoUrl) {
+            // 切换全景图
+            pannellum.viewer('panorama', {
+                "panorama": picUrl,
+                "autoLoad": true,
+                "title": picUrl === "test.jpg" ? "冈仁波齐转山起点" : "转山第一垭口"
+            });
+            // 切换视频源
+            const videoSource = document.querySelector('video source');
+            videoSource.src = videoUrl;
+            document.querySelector('video').load();
+            // 隐藏视频，让用户重新点击播放
+            hideVideo();
         }
     </script>
 </body>
-
 </html>
-
-
-
