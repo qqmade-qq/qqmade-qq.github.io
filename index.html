@@ -6,6 +6,17 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
     <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
     <style>
+        /* 藏式唐卡边框容器（新增！解决特效显示问题） */
+        .panorama-container {
+            position: relative; /* 让特效在容器内显示 */
+            width: 100%;
+            height: 600px;
+            margin: 0 auto;
+            border: 20px solid transparent;
+            border-image: url("https://img.freepik.com/free-photo/tibetan-textile-pattern_23-2149002079.jpg?w=826&t=st=1736445000~exp=1736445600~hmac=8f8c7a8b9d7e6c5b4a3s2d1f0g9h8j7k6l5m4n3b2v1c0x9s8a7d6f5g4h3j2k1l0") 30 stretch;
+            box-shadow: 0 0 30px rgba(210, 180, 140, 0.8);
+        }
+
         /* 全景图容器样式 */
         #panorama {
             width: 100%;
@@ -13,42 +24,44 @@
             margin: 0 auto;
             position: relative;
         }
+
         /* 飘雪特效 */
-.snow {
-  position: absolute;
-  width: 10px; height: 10px;
-  background: #fff; border-radius: 50%;
-  opacity: 0.7;
-  animation: snow-fall 5s linear infinite;
-}
-/* 藏式烟花CSS（粘贴到<style>） */
-.firework {
-  position: absolute;
-  pointer-events: none;
-  z-index: 999;
-  transform: translate(-50%, -50%);
-  width: 0;
-  height: 0;
-}
-.firework-part {
-  position: absolute;
-  width: 6px; /* 从4px改成6px，更粗 */
-  height: 25px; /* 从15px改成25px，更长 */
-  background: linear-gradient(to top, #ff3333, #ff9933);
-  border-radius: 50%;
-  opacity: 1; /* 从0.9改成1，更亮 */
-  animation: firework-burst 2s ease-out forwards; /* 从1.5s改成2s，绽放更久 */
-}
-@keyframes firework-burst {
-  0% {
-    transform: translateY(0) rotate(0deg);
-    opacity: 0.9;
-  }
-  100% {
-    transform: translateY(-100px) rotate(720deg);
-    opacity: 0;
-  }
-}
+        .snow {
+            position: absolute;
+            width: 10px; height: 10px;
+            background: #fff; border-radius: 50%;
+            opacity: 0.7;
+            animation: snow-fall 5s linear infinite;
+            z-index: 1000; /* 避免被全景图遮挡 */
+        }
+        @keyframes snow-fall {
+            0% { transform: translateY(0); opacity: 0.7; }
+            100% { transform: translateY(600px); opacity: 0; }
+        }
+
+        /* 藏式烟花CSS */
+        .firework {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1000;
+            transform: translate(-50%, -50%);
+            width: 0;
+            height: 0;
+        }
+        .firework-part {
+            position: absolute;
+            width: 6px;
+            height: 25px;
+            background: linear-gradient(to top, #ff3333, #ff9933);
+            border-radius: 50%;
+            opacity: 1;
+            animation: firework-burst 2s ease-out forwards;
+        }
+        @keyframes firework-burst {
+            0% { transform: translateY(0) rotate(0deg); opacity: 0.9; }
+            100% { transform: translateY(-100px) rotate(720deg); opacity: 0; }
+        }
+
         /* 播放按钮样式 */
         .play-btn {
             position: absolute;
@@ -63,33 +76,26 @@
             font-size: 18px;
             font-weight: bold;
             cursor: pointer;
-            z-index: 998;
+            z-index: 1000;
         }
-/* 粒子特效CSS（粘贴到<style>里） */
-.particle {
-  position: absolute;
-  pointer-events: none;
-  z-index: 999; /* 保持不变 */
-  background-size: contain;
-  background-repeat: no-repeat;
-  opacity: 1; /* 从0.8改成1，更亮 */
-  animation: particle-fall 3s ease-out forwards; /* 从2s改成3s，飘得更久 */
-}
-/* 下面新增：放大粒子尺寸 */
-.particle {
-  width: 50px !important; /* 强制放大到50px */
-  height: 50px !important;
-}
-@keyframes particle-fall {
-  0% {
-    transform: translate(0, 0) rotate(0deg);
-    opacity: 0.8;
-  }
-  100% {
-    transform: translate(0, 100px) rotate(360deg);
-    opacity: 0;
-  }
-}
+
+        /* 粒子特效CSS */
+        .particle {
+            position: absolute;
+            pointer-events: none;
+            z-index: 1000;
+            background-size: contain;
+            background-repeat: no-repeat;
+            opacity: 1;
+            animation: particle-fall 3s ease-out forwards;
+            width: 50px !important;
+            height: 50px !important;
+        }
+        @keyframes particle-fall {
+            0% { transform: translate(0, 0) rotate(0deg); opacity: 0.8; }
+            100% { transform: translate(0, 100px) rotate(360deg); opacity: 0; }
+        }
+
         /* 场景切换按钮容器 */
         .scene-btn-box {
             position: absolute;
@@ -98,7 +104,7 @@
             transform: translateX(-50%);
             display: flex;
             gap: 10px;
-            z-index: 998;
+            z-index: 1000;
         }
 
         /* 场景切换按钮样式 */
@@ -118,7 +124,7 @@
             left: 50%;
             transform: translate(-50%, -50%);
             display: none;
-            z-index: 999;
+            z-index: 1001;
         }
 
         /* 视频样式 */
@@ -143,16 +149,19 @@
     </style>
 </head>
 <body>
-    <!-- 全景图容器 -->
-    <div id="panorama"></div>
+    <!-- 藏式唐卡边框容器（新增！包裹全景图） -->
+    <div class="panorama-container">
+        <!-- 全景图容器 -->
+        <div id="panorama"></div>
 
-    <!-- 播放视频按钮 -->
-    <button class="play-btn" onclick="showVideo()">点击播放卓玛讲解视频</button>
+        <!-- 播放视频按钮 -->
+        <button class="play-btn" onclick="showVideo()">点击播放卓玛讲解视频</button>
 
-    <!-- 场景切换按钮 -->
-    <div class="scene-btn-box">
-        <button class="scene-btn" style="background: #ff3333;" onclick='changeScene("test.jpg", "https://kailashtrek.online/wp-content/uploads/2026/01/KAILASH.mp4")'>转山起点</button>
-        <button class="scene-btn" style="background: #2299ff;" onclick='changeScene("pass.jpg", "https://kailashtrek.online/wp-content/uploads/2026/01/KAILASH.mp4")'>第一垭口</button>
+        <!-- 场景切换按钮 -->
+        <div class="scene-btn-box">
+            <button class="scene-btn" style="background: #ff3333;" onclick='changeScene("test.jpg", "https://kailashtrek.online/wp-content/uploads/2026/01/KAILASH.mp4")'>转山起点</button>
+            <button class="scene-btn" style="background: #2299ff;" onclick='changeScene("pass.jpg", "https://kailashtrek.online/wp-content/uploads/2026/01/KAILASH.mp4")'>第一垭口</button>
+        </div>
     </div>
 
     <!-- 视频弹窗 -->
@@ -167,7 +176,7 @@
     <script>
         // 初始化全景图（默认显示转山起点）
         pannellum.viewer('panorama', {
-            "panorama": "pass.jpg",
+            "panorama": "test.jpg", // 改回默认起点，更符合逻辑
             "autoLoad": true,
             "title": "冈仁波齐转山起点",
             "author": "转山向导卓玛"
@@ -185,96 +194,73 @@
             document.querySelector('.play-btn').style.display = 'block';
         }
 
-        // 切换转山场景（全景图+视频）
+        // 切换转山场景（全景+视频+飘雪特效，合并成一个函数！）
         function changeScene(picUrl, videoUrl) {
-             切换全景图
+            // 1. 切换全景图
             pannellum.viewer('panorama', {
                 "panorama": picUrl,
                 "autoLoad": true,
                 "title": picUrl === "test.jpg" ? "冈仁波齐转山起点" : "转山第一垭口"
             });
-            // 切换视频源
+
+            // 2. 切换视频源
             const videoSource = document.querySelector('video source');
             videoSource.src = videoUrl;
             document.querySelector('video').load();
-            // 隐藏视频，让用户重新点击播放
+
+            // 3. 垭口场景自动飘雪
+            document.querySelectorAll('.snow').forEach(s => s.remove());
+            if (picUrl === "pass.jpg") {
+                for (let i=0; i<20; i++) {
+                    const snow = document.createElement('div');
+                    snow.className = 'snow';
+                    snow.style.left = `${Math.random()*100}%`; // 改为容器内百分比
+                    snow.style.animationDelay = `${Math.random()*5}s`;
+                    document.querySelector('.panorama-container').appendChild(snow);
+                }
+            }
+
+            // 4. 隐藏视频
             hideVideo();
-        }// 藏式烟花JS（粘贴到<script>最后）
-document.getElementById('panorama').addEventListener('click', function(e) {
-  // 先清空旧烟花
-  document.querySelectorAll('.firework').forEach(fw => fw.remove());
-  
-  // 创建烟花容器
-  const firework = document.createElement('div');
-  firework.className = 'firework';
-  firework.style.left = `${e.clientX}px`;
-  firework.style.top = `${e.clientY}px`;
-  document.body.appendChild(firework);
+        }
 
-  // 生成12个烟花粒子（圆形绽放）
-  for (let i = 0; i < 12; i++) {
-    const part = document.createElement('div');
-    part.className = 'firework-part';
-    part.style.transform = `rotate(${i * 30}deg) translateY(0)`;
-    firework.appendChild(part);
-  }
+        // 藏式烟花JS
+        document.getElementById('panorama').addEventListener('click', function(e) {
+            document.querySelectorAll('.firework').forEach(fw => fw.remove());
+            const firework = document.createElement('div');
+            firework.className = 'firework';
+            firework.style.left = `${e.clientX}px`;
+            firework.style.top = `${e.clientY}px`;
+            document.querySelector('.panorama-container').appendChild(firework);
 
-  // 2秒后删除烟花
-  setTimeout(() => firework.remove(), 1500);
-});
-        // 粒子特效JS（粘贴到<script>最后）
-// 经幡/青稞图片链接（免费素材）
-const particleImages = [
-  "https://img.freepik.com/free-png/tibetan-prayer-flag_1308-14504.jpg?w=360&t=st=1736446000~exp=1736446600~hmac=9a8b7c6d5e4f3g2h1j0k9l8m7n6b5v4c3x2s1d0f9g8h7j6k5l4m3n2b1v0c9x8s7d6f5g4h3j2k1l0",
-  "https://img.freepik.com/free-photo/close-up-of-green-barley-field_1339-6417.jpg?w=360&t=st=1736446100~exp=1736446700~hmac=8b7c6d5e4f3g2h1j0k9l8m7n6b5v4c3x2s1d0f9g8h7j6k5l4m3n2b1v0c9x8s7d6f5g4h3j2k1l0"
-];
-// 点击全景生成粒子
-document.getElementById('panorama').addEventListener('click', function(e) {
-  // 获取点击位置
-  const x = e.clientX;
-  const y = e.clientY;
-  // 生成3个粒子
-  for (let i = 0; i < 3; i++) {
-    const particle = document.createElement('div');
-    particle.className = 'particle';
-    // 随机选经幡/青稞
-    const img = particleImages[Math.floor(Math.random() * particleImages.length)];
-    particle.style.backgroundImage = `url(${img})`;
-    // 随机大小和位置偏移
-    const size = Math.random() * 30 + 10;
-    particle.style.width = `${size}px`;
-    particle.style.height = `${size}px`;
-    particle.style.left = `${x + Math.random() * 20 - 10}px`;
-    particle.style.top = `${y + Math.random() * 20 - 10}px`;
-    // 添加到页面
-    document.body.appendChild(particle);
-    // 2秒后删除粒子
-    setTimeout(() => {
-      particle.remove();
-    }, 2000);
-  }
-});
-   // 垭口场景自动飘雪
-function changeScene(picUrl, videoUrl) {
-  // 原来的代码...
-  // 清空旧雪
-  document.querySelectorAll('.snow').forEach(s => s.remove());
-  // 垭口场景加雪
-  if (picUrl === "pass.jpg") {
-    for (let i=0; i<20; i++) {
-      const snow = document.createElement('div');
-      snow.className = 'snow';
-      snow.style.left = `${Math.random()*100}vw`;
-      snow.style.animationDelay = `${Math.random()*5}s`;
-      document.body.appendChild(snow);
-    }
-  }
-} </script>
+            for (let i = 0; i < 12; i++) {
+                const part = document.createElement('div');
+                part.className = 'firework-part';
+                part.style.transform = `rotate(${i * 30}deg) translateY(0)`;
+                firework.appendChild(part);
+            }
+            setTimeout(() => firework.remove(), 1500);
+        });
+
+        // 粒子特效JS
+        const particleImages = [
+            "https://img.freepik.com/free-png/tibetan-prayer-flag_1308-14504.jpg?w=360&t=st=1736446000~exp=1736446600~hmac=9a8b7c6d5e4f3g2h1j0k9l8m7n6b5v4c3x2s1d0f9g8h7j6k5l4m3n2b1v0c9x8s7d6f5g4h3j2k1l0",
+            "https://img.freepik.com/free-photo/close-up-of-green-barley-field_1339-6417.jpg?w=360&t=st=1736446100~exp=1736446700~hmac=8b7c6d5e4f3g2h1j0k9l8m7n6b5v4c3x2s1d0f9g8h7j6k5l4m3n2b1v0c9x8s7d6f5g4h3j2k1l0"
+        ];
+        document.getElementById('panorama').addEventListener('click', function(e) {
+            const x = e.clientX;
+            const y = e.clientY;
+            for (let i = 0; i < 3; i++) {
+                const particle = document.createElement('div');
+                particle.className = 'particle';
+                const img = particleImages[Math.floor(Math.random() * particleImages.length)];
+                particle.style.backgroundImage = `url(${img})`;
+                particle.style.left = `${x + Math.random() * 20 - 10}px`;
+                particle.style.top = `${y + Math.random() * 20 - 10}px`;
+                document.querySelector('.panorama-container').appendChild(particle);
+                setTimeout(() => particle.remove(), 2000);
+            }
+        });
+    </script>
 </body>
 </html>
-
-
-
-
-
-
