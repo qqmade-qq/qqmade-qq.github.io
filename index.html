@@ -13,6 +13,14 @@
             margin: 0 auto;
             position: relative;
         }
+        /* 飘雪特效 */
+.snow {
+  position: absolute;
+  width: 10px; height: 10px;
+  background: #fff; border-radius: 50%;
+  opacity: 0.7;
+  animation: snow-fall 5s linear infinite;
+}
 /* 藏式烟花CSS（粘贴到<style>） */
 .firework {
   position: absolute;
@@ -246,9 +254,25 @@ document.getElementById('panorama').addEventListener('click', function(e) {
     }, 2000);
   }
 });
-    </script>
+   // 垭口场景自动飘雪
+function changeScene(picUrl, videoUrl) {
+  // 原来的代码...
+  // 清空旧雪
+  document.querySelectorAll('.snow').forEach(s => s.remove());
+  // 垭口场景加雪
+  if (picUrl === "pass.jpg") {
+    for (let i=0; i<20; i++) {
+      const snow = document.createElement('div');
+      snow.className = 'snow';
+      snow.style.left = `${Math.random()*100}vw`;
+      snow.style.animationDelay = `${Math.random()*5}s`;
+      document.body.appendChild(snow);
+    }
+  }
+} </script>
 </body>
 </html>
+
 
 
 
