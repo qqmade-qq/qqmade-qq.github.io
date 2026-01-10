@@ -155,11 +155,12 @@
         <div id="panorama"></div>
 <!-- 止热寺视频按钮（显示在全景区域内） -->
 <div style="position: absolute; top: 20px; left: 20px; z-index: 100;">
-  <button id="zrVideoBtn" style="background: #ff9800; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;">
-    卓玛讲解止热寺
-  </button>
+ <button id="zrVideoBtn" style="background: #ff9800; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;"
+onclick="document.getElementById('zrVideoBox').style.display = document.getElementById('zrVideoBox').style.display === 'block' ? 'none' : 'block'">
+  卓玛讲解止热寺
+</button>
   <!-- 视频弹窗 -->
-  <div id="zrVideoBox" style="display: block; position: absolute; top: 60px; left: 0; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); z-index: 200;">
+  <div id="zrVideoBox" style="display: none; position: absolute; top: 60px; left: 0; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); z-index: 200;">
     <video width="500" controls>
       <source src="https://qqmade-qq.github.io/zm.mp4" type="video/mp4">
       你的浏览器不支持视频播放
@@ -285,6 +286,7 @@ document.getElementById('zrVideoBtn').addEventListener('click', function() {
 </div>
 </body>
 </html>
+
 
 
 
