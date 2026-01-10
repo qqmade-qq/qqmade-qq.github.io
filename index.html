@@ -6,21 +6,21 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.css">
     <script src="https://cdn.jsdelivr.net/npm/pannellum@2.5.6/build/pannellum.js"></script>
     <style>
-        /* 藏式唐卡边框容器（新增！解决特效显示问题） */
+        /* 藏式唐卡边框容器 */
         .panorama-container {
-            position: relative; /* 让特效在容器内显示 */
+            position: relative;
             width: 100%;
-            height: 600px;
+            height: 800px;
             margin: 0 auto;
             border: 20px solid transparent;
             border-image: url("https://img.freepik.com/free-photo/tibetan-textile-pattern_23-2149002079.jpg?w=826&t=st=1736445000~exp=1736445600~hmac=8f8c7a8b9d7e6c5b4a3s2d1f0g9h8j7k6l5m4n3b2v1c0x9s8a7d6f5g4h3j2k1l0") 30 stretch;
             box-shadow: 0 0 30px rgba(210, 180, 140, 0.8);
         }
 
-        /* 全景图容器样式 */
+        /* 全景图容器样式（唯一容器，不重复） */
         #panorama {
             width: 100%;
-            height: 600px;
+            height: 800px;
             margin: 0 auto;
             position: relative;
         }
@@ -32,11 +32,11 @@
             background: #fff; border-radius: 50%;
             opacity: 0.7;
             animation: snow-fall 5s linear infinite;
-            z-index: 1000; /* 避免被全景图遮挡 */
+            z-index: 1000;
         }
         @keyframes snow-fall {
             0% { transform: translateY(0); opacity: 0.7; }
-            100% { transform: translateY(600px); opacity: 0; }
+            100% { transform: translateY(800px); opacity: 0; }
         }
 
         /* 藏式烟花CSS */
@@ -117,7 +117,7 @@
             font-size: 14px;
         }
 
-        /* 视频弹窗样式 */
+        /* 视频弹窗样式（原有视频） */
         #videoModal {
             position: absolute;
             top: 50%;
@@ -127,7 +127,7 @@
             z-index: 1001;
         }
 
-        /* 视频样式 */
+        /* 视频样式（原有视频） */
         #videoModal video {
             width: 500px;
             height: 300px;
@@ -136,7 +136,7 @@
             border-radius: 8px;
         }
 
-        /* 关闭视频按钮 */
+        /* 关闭视频按钮（原有视频） */
         .close-video-btn {
             margin-top: 10px;
             padding: 8px 16px;
@@ -146,113 +146,143 @@
             border: none;
             border-radius: 4px;
         }
+
+        /* 止热寺视频按钮容器 */
+        .zr-btn-container {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            z-index: 100;
+            display: flex;
+            gap: 10px;
+        }
+
+        /* 止热寺视频弹窗样式 */
+        #zrVideoBox {
+            display: none;
+            position: absolute;
+            top: 80px;
+            right: 20px;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 4px 16px rgba(0,0,0,0.3);
+            z-index: 200;
+        }
     </style>
 </head>
 <body>
-    <!-- 藏式唐卡边框容器（新增！包裹全景图） -->
+    <!-- 藏式唐卡边框容器（唯一外层容器） -->
     <div class="panorama-container">
-        <!-- 全景图容器 -->
-        <div id="panorama" style="width: 100%; height: 800px;"></div>
-<!-- 转山节点按钮（恢复昨天的正常逻辑） -->
-<div style="position: absolute; top: 20px; right: 20px; z-index: 100; display: flex; gap: 10px;">
-  <button class="scene-btn" style="background: #ff3333; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;"
-  onclick="changeScene('https://kailashrek.online/wp-content/uploads/2026/01/test.jpg', 'https://kailashrek.online/wp-content/uploads/2026/01/KAILASH.mp4')">转山起点</button>
-  
-  <button class="scene-btn" style="background: #229fff; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;"
-  onclick="changeScene('https://kailashrek.online/wp-content/uploads/2026/01/pass.jpg', 'https://kailashrek.online/wp-content/uploads/2026/01/PASS.mp4')">第一垭口</button>
-  
-  <!-- 新增的止热寺视频按钮（保留） -->
-  <button id="zrVideoBtn" style="background: #ff9800; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;"
-  onclick="
-    const box = document.getElementById('zrVideoBox');
-    const video = box.querySelector('video');
-    box.style.display = box.style.display === 'block' ? 'none' : 'block';
-    if (box.style.display === 'block') { video.play(); } else { video.pause(); }
-  ">卓玛讲解止热寺</button>
-</div>
+        <!-- 全景图容器（唯一，不重复） -->
+        <div id="panorama"></div>
 
-<!-- 止热寺视频弹窗（保留） -->
-<div id="zrVideoBox" style="display: none; position: absolute; top: 80px; right: 20px; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); z-index: 200;">
-  <video width="500" controls muted>
-    <source src="https://qqmade-qq.github.io/zm.mp4" type="video/mp4">
-    你的浏览器不支持视频播放
-  </video>
-</div>
+        <!-- 转山节点+止热寺按钮容器 -->
+        <div class="zr-btn-container">
+            <button class="scene-btn" style="background: #ff3333; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;"
+            onclick="changeScene('https://kailashrek.online/wp-content/uploads/2026/01/test.jpg', 'https://kailashrek.online/wp-content/uploads/2026/01/KAILASH.mp4')">转山起点</button>
+            
+            <button class="scene-btn" style="background: #229fff; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;"
+            onclick="changeScene('https://kailashrek.online/wp-content/uploads/2026/01/pass.jpg', 'https://kailashrek.online/wp-content/uploads/2026/01/PASS.mp4')">第一垭口</button>
+            
+            <!-- 止热寺视频按钮 -->
+            <button id="zrVideoBtn" style="background: #ff9800; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;">
+                卓玛讲解止热寺
+            </button>
+        </div>
 
-<!-- 全景容器（必须保留宽高） -->
-<div id="panorama" style="width: 100%; height: 800px;"></div>
-</div>
-        <!-- 播放视频按钮 -->
+        <!-- 止热寺视频弹窗 -->
+        <div id="zrVideoBox">
+            <video width="500" controls muted>
+                <source src="https://qqmade-qq.github.io/zm.mp4" type="video/mp4">
+                你的浏览器不支持视频播放
+            </video>
+        </div>
+
+        <!-- 原有播放视频按钮 -->
         <button class="play-btn" onclick="showVideo()">点击播放卓玛讲解视频</button>
 
-        <!-- 场景切换按钮 -->
+        <!-- 原有场景切换按钮 -->
         <div class="scene-btn-box">
-            <button class="scene-btn" style="background: #ff3333;" onclick='changeScene("test.jpg", ">转山起点</button>
-            <button class="scene-btn" style="background: #2299ff;" onclick='changeScene("pass.jpg", ">第一垭口</button>
+            <button class="scene-btn" style="background: #ff3333;" onclick='changeScene("https://kailashrek.online/wp-content/uploads/2026/01/test.jpg", "https://kailashrek.online/wp-content/uploads/2026/01/KAILASH.mp4")'>转山起点</button>
+            <button class="scene-btn" style="background: #2299ff;" onclick='changeScene("https://kailashrek.online/wp-content/uploads/2026/01/pass.jpg", "https://kailashrek.online/wp-content/uploads/2026/01/PASS.mp4")'>第一垭口</button>
         </div>
-    </div>
- 
-    <!-- 视频弹窗 -->
-    <div id="videoModal">
-        <video controls autoplay>
-            <source src="https://kailashtrek.online/wp-content/uploads/2026/01/KAILASH.mp4" type="video/mp4">
-            你的浏览器不支持视频播放
-        </video>
-        <button class="close-video-btn" onclick="hideVideo()">关闭视频</button>
+
+        <!-- 原有视频弹窗 -->
+        <div id="videoModal">
+            <video controls autoplay>
+                <source src="https://kailashtrek.online/wp-content/uploads/2026/01/KAILASH.mp4" type="video/mp4">
+                你的浏览器不支持视频播放
+            </video>
+            <button class="close-video-btn" onclick="hideVideo()">关闭视频</button>
+        </div>
     </div>
 
     <script>
-        // 初始化全景图（默认显示转山起点）
-        pannellum.viewer('panorama', {
-            "panorama": "test.jpg", // 改回默认起点，更符合逻辑
-            "autoLoad": true,
-            "title": "冈仁波齐转山起点",
-            "author": "转山向导卓玛"
-        });
+        // 页面加载完成后初始化
+        window.onload = function() {
+            // 1. 默认显示转山起点全景+视频
+            changeScene(
+                'https://kailashrek.online/wp-content/uploads/2026/01/test.jpg',
+                'https://kailashrek.online/wp-content/uploads/2026/01/KAILASH.mp4'
+            );
 
-        // 显示视频
-        function showVideo() {
-            document.getElementById('videoModal').style.display = 'block';
-            document.querySelector('.play-btn').style.display = 'none';
-        }
+            // 2. 止热寺视频弹窗控制
+            const zrVideoBtn = document.getElementById('zrVideoBtn');
+            const zrVideoBox = document.getElementById('zrVideoBox');
+            const zrVideo = zrVideoBox.querySelector('video');
 
-        // 隐藏视频
-        function hideVideo() {
-            document.getElementById('videoModal').style.display = 'none';
-            document.querySelector('.play-btn').style.display = 'block';
-        }
+            zrVideoBtn.addEventListener('click', function() {
+                zrVideoBox.style.display = zrVideoBox.style.display === 'block' ? 'none' : 'block';
+                if (zrVideoBox.style.display === 'block') {
+                    zrVideo.play();
+                } else {
+                    zrVideo.pause();
+                }
+            });
+        };
 
-        // 切换转山场景（全景+视频+飘雪特效，合并成一个函数！）
+        // 3. 全景+视频切换核心函数（含飘雪特效）
         function changeScene(picUrl, videoUrl) {
-            // 1. 切换全景图
+            // 切换全景图
             pannellum.viewer('panorama', {
                 "panorama": picUrl,
                 "autoLoad": true,
-                "title": picUrl === "test.jpg" ? "冈仁波齐转山起点" : "转山第一垭口"
+                "title": picUrl.includes('test.jpg') ? "冈仁波齐转山起点" : "转山第一垭口"
             });
 
-            // 2. 切换视频源
-            const videoSource = document.querySelector('video source');
+            // 切换视频源
+            const videoSource = document.querySelector('#videoModal video source');
             videoSource.src = videoUrl;
-            document.querySelector('video').load();
+            document.querySelector('#videoModal video').load();
 
-            // 3. 垭口场景自动飘雪
+            // 垭口飘雪特效
             document.querySelectorAll('.snow').forEach(s => s.remove());
-            if (picUrl === "pass.jpg") {
+            if (picUrl.includes('pass.jpg')) {
                 for (let i=0; i<20; i++) {
                     const snow = document.createElement('div');
                     snow.className = 'snow';
-                    snow.style.left = `${Math.random()*100}%`; // 改为容器内百分比
+                    snow.style.left = `${Math.random()*100}%`;
                     snow.style.animationDelay = `${Math.random()*5}s`;
                     document.querySelector('.panorama-container').appendChild(snow);
                 }
             }
 
-            // 4. 隐藏视频
+            // 隐藏视频
             hideVideo();
         }
 
-        // 藏式烟花JS
+        // 4. 原有视频显示/隐藏
+        function showVideo() {
+            document.getElementById('videoModal').style.display = 'block';
+            document.querySelector('.play-btn').style.display = 'none';
+        }
+        function hideVideo() {
+            document.getElementById('videoModal').style.display = 'none';
+            document.querySelector('.play-btn').style.display = 'block';
+        }
+
+        // 5. 藏式烟花特效
         document.getElementById('panorama').addEventListener('click', function(e) {
             document.querySelectorAll('.firework').forEach(fw => fw.remove());
             const firework = document.createElement('div');
@@ -270,7 +300,7 @@
             setTimeout(() => firework.remove(), 1500);
         });
 
-        // 粒子特效JS
+        // 6. 粒子特效
         const particleImages = [
             "https://img.freepik.com/free-png/tibetan-prayer-flag_1308-14504.jpg?w=360&t=st=1736446000~exp=1736446600~hmac=9a8b7c6d5e4f3g2h1j0k9l8m7n6b5v4c3x2s1d0f9g8h7j6k5l4m3n2b1v0c9x8s7d6f5g4h3j2k1l0",
             "https://img.freepik.com/free-photo/close-up-of-green-barley-field_1339-6417.jpg?w=360&t=st=1736446100~exp=1736446700~hmac=8b7c6d5e4f3g2h1j0k9l8m7n6b5v4c3x2s1d0f9g8h7j6k5l4m3n2b1v0c9x8s7d6f5g4h3j2k1l0"
@@ -289,73 +319,6 @@
                 setTimeout(() => particle.remove(), 2000);
             }
         });
-  <script>
- // 合并后的完整JS模块（覆盖原有<script>内的所有代码）
-window.onload = function() {
-  // 1. 页面加载完成后，默认显示转山起点全景+视频
-  changeScene(
-    'https://kailashrek.online/wp-content/uploads/2026/01/test.jpg',
-    'https://kailashrek.online/wp-content/uploads/2026/01/KAILASH.mp4'
-  );
-
-  // 2. 止热寺视频弹窗控制（自动播放+显示/隐藏）
-  const zrVideoBtn = document.getElementById('zrVideoBtn');
-  const zrVideoBox = document.getElementById('zrVideoBox');
-  const zrVideo = zrVideoBox.querySelector('video');
-
-  if (zrVideoBtn) {
-    zrVideoBtn.addEventListener('click', function() {
-      // 切换弹窗显示/隐藏
-      zrVideoBox.style.display = zrVideoBox.style.display === 'block' ? 'none' : 'block';
-      // 显示时自动播放，隐藏时暂停
-      if (zrVideoBox.style.display === 'block') {
-        zrVideo.play();
-      } else {
-        zrVideo.pause();
-      }
-    });
-  }
-};
-
-// 3. 全景+原有视频切换核心函数（转山起点/第一垭口）
-function changeScene(picurl, videourl) {
-  // 切换360全景背景
-  pannellum.viewer('panorama', {
-    "panorama": picurl,
-    "autoLoad": true,
-    "title": picurl.includes('test.jpg') ? "冈仁波齐转山起点" : "转山第一垭口"
-  });
-
-  // 切换对应节点的视频（你Hostinger服务器的视频）
-  const videoSource = document.querySelector('#sceneVideo source');
-  if (videoSource && videourl) {
-    videoSource.src = videourl;
-    document.querySelector('#sceneVideo').load();
-  }
-}
-</script>
-</script>
-   
-</div>
+    </script>
 </body>
 </html>
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
