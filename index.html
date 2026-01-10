@@ -261,7 +261,14 @@
                 setTimeout(() => particle.remove(), 2000);
             }
         });
-    </script>
+   <script>
+  // 止热寺视频弹窗触发
+  document.getElementById('zrVideoBtn').addEventListener('click', function() {
+    const videoBox = document.getElementById('zrVideoBox');
+    videoBox.style.display = videoBox.style.display === 'block' ? 'none' : 'block';
+  });
+</script>
+</script>
     <!-- 止热寺卓玛讲解视频 -->
 <div style="position: relative; margin-top: 10px;">
   <button id="zrVideoBtn" style="background: #ff9800; color: white; padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer;">
@@ -276,5 +283,6 @@
 </div>
 </body>
 </html>
+
 
 
