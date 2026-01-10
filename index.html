@@ -153,17 +153,19 @@
     <div class="panorama-container">
         <!-- 全景图容器 -->
         <div id="panorama"></div>
-<!-- 止热寺卓玛讲解视频 -->
-<div style="position: relative; margin-top: 10px;">
-  <button id="zrVideoBtn" style="background: #ff9800; color: white; padding: 10px 15px; border: none; border-radius: 6px; cursor: pointer;">
+<!-- 止热寺视频按钮（显示在全景区域内） -->
+<div style="position: absolute; top: 20px; left: 20px; z-index: 100;">
+  <button id="zrVideoBtn" style="background: #ff9800; color: white; padding: 12px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 16px;">
     卓玛讲解止热寺
   </button>
-  <div id="zrVideoBox" style="display: none; position: absolute; top: 40px; left: 0; background: white; padding: 15px; border-radius: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.2); z-index: 200;">
-    <video width="400" controls>
-      <source src="zm.mp4" type="video/mp4"> <!-- 你上传的视频文件名是zmm.mp4，直接用这个 -->
+  <!-- 视频弹窗 -->
+  <div id="zrVideoBox" style="display: none; position: absolute; top: 60px; left: 0; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 4px 16px rgba(0,0,0,0.3); z-index: 200;">
+    <video width="500" controls>
+      <source src="zm.mp4" type="video/mp4">
       你的浏览器不支持视频播放
     </video>
   </div>
+</div>
         <!-- 播放视频按钮 -->
         <button class="play-btn" onclick="showVideo()">点击播放卓玛讲解视频</button>
 
@@ -272,17 +274,18 @@
             }
         });
    <script>
-  // 止热寺视频弹窗触发
-  document.getElementById('zrVideoBtn').addEventListener('click', function() {
-    const videoBox = document.getElementById('zrVideoBox');
-    videoBox.style.display = videoBox.style.display === 'block' ? 'none' : 'block';
-  });
+  // 止热寺视频弹窗控制
+document.getElementById('zrVideoBtn').addEventListener('click', function() {
+  const videoBox = document.getElementById('zrVideoBox');
+  videoBox.style.display = videoBox.style.display === 'block' ? 'none' : 'block';
+});
 </script>
 </script>
    
 </div>
 </body>
 </html>
+
 
 
 
